@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  backend:
+    container_name: flip-card-api
+    restart: always
+    build:
+      context: .
+      target: prod
+    depends_on:
+      - "mongo-server"
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.prod
+    volumes:
+      - ./public:/usr/src/flip-card-api/public
+      - ./data/logs:/usr/src/flip-card-api/data/logs
+  mongo-server:
+    container_name: flip-card-mongo-master
+    image: mongo
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: supersecretpass1234!
+    volumes:
+      - ./data/volumes/mongodb:/data
